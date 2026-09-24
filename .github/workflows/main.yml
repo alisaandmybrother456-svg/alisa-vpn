@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Web App
 
 on:
   push:
@@ -9,32 +9,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./alisa-vpn
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
+          node-version: '18'
 
       - name: Install Dependencies
-        run: flutter pub get
+        run: npm install
 
-      - name: Build APK
-        run: flutter build apk --release
+      - name: Build Web App
+        run: npm run build
 
-      - name: Upload APK
+      - name: Upload Web Build
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: alisa-vpn/build/app/outputs/flutter-apk/app-release.apk
+          name: web-dist
+          path: dist
